@@ -9,7 +9,7 @@
   * PHP JSON
   * PHP SimpleXML
 
-##easy to install and use
+##Easy to install and use
 
 There is a library set for the test environment payment gateway. For the production environment must be set in /libs/24pay.class.php all variables that ensure your IDENTIFICATION within 24-pay.sk.
 
