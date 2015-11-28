@@ -1,6 +1,7 @@
 24-pay Payments Library for PHP
 ===================================================
 
+Payment gate: https://www.24-pay.sk/
 
 ##Requirements:
 
