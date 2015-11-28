@@ -45,10 +45,11 @@ if ($sign == $params['@attributes']['sign'])
              * JUST FAIL
              * UPDATE STATUS IN DATABASE
              *
+             * why?
              * NO MONEY
              * SMALL LIMIT ON CARD
              * WRONG CARD DATA
-             * NOT PAID BAND TRANSFER (AFTER 3-4 DAYS)
+             * NOT PAID BANK TRANSFER (AFTER 3-4 DAYS)
              * 24PAY ERROR/MAINTENANCE
              *
              */
