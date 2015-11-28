@@ -22,7 +22,7 @@ $p24 = new pay24($pData);
 $pubData = $p24->get_payment_data();
 ?>
 
-<a href="https://github.com/roman-huliak/24PAY-API" target="_blank">https://github.com/roman-huliak/24PAY-API</a>
+<a href="https://github.com/roman-huliak/24-pay-payment-gate" target="_blank">https://github.com/roman-huliak/24-pay-payment-gate</a>
 <br />
 <a href="https://www.24-pay.sk/" target="_blank">https://www.24-pay.sk/</a>
 
