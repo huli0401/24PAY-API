@@ -13,7 +13,7 @@ $pData = array(
     'amount' => $price,
     'MsTxnId' => mt_rand(0, 99999999),
     'requestType' => 'payRequest',
-    'clientid' => 'roman@huliak.eu',
+    'clientid' => '1254',
     'firstName' => 'Roman',
     'familyName' => 'Huliak'
 );

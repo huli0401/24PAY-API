@@ -20,7 +20,7 @@ final class pay24
      * @var type
      * @static
      */
-    private static $mid = 'demoOMED';
+    private static $mid = '24-PAY-MID';
 
     /**
      * 24pay - Eshop ID
@@ -29,7 +29,7 @@ final class pay24
      * @var type
      * @static
      */
-    private static $eshopId = '11111111';
+    private static $eshopId = '1111111';
 
     /**
      * 24pay - SIGN HEX KEY
@@ -47,7 +47,7 @@ final class pay24
      * @var string
      * @static
      */
-    private static $key = '1234567812345678123456781234567812345678123456781234567812345678';
+    private static $key = '123456790123456790123456790123456790123456790123456790123456790';
 
     /**
      * Production URL
@@ -64,7 +64,7 @@ final class pay24
      * @var string
      * @static
      */
-    private static $url = 'https://doxxsl-staging.24-pay.eu/pay_gate/paygt';
+    private static $url = 'https://admin.24-pay.eu/pay_gate/paygt';
     private static $data;
 
     /**
@@ -74,7 +74,7 @@ final class pay24
      * @var string
      * @static
      */
-    private static $iv = 'demoOMEDDEMOomed';
+    private static $iv = 'nTLhLOBSSBOLhLTn';
     private static $sign;
 
     /**
@@ -84,7 +84,7 @@ final class pay24
      * @var string
      * @static
      */
-    private static $rurl = 'http://24pay-api.loc/user-after-pay.php';
+    private static $rurl = 'http://24p.loc/user-after-pay.php';
 
     /**
      * API response URL
@@ -94,6 +94,8 @@ final class pay24
      * @static
      */
     private static $nurl = 'http://24pay-api.loc/gate-payment-info.php';
+
+    private static $msg = '';
 
     /**
      * Other settings
@@ -233,14 +235,14 @@ final class pay24
      */
     private static function get_sign()
     {
-        $_cipher = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_CBC, '');
-        $block = mcrypt_get_block_size('des', MCRYPT_MODE_CBC);
-        $pad = $block - (strlen(self::$data) % $block);
-        self::$data .= str_repeat(chr($pad), $pad);
-        mcrypt_generic_init($_cipher, self::$hexKey, self::$iv);
-        $result = mcrypt_generic($_cipher, self::$data);
-        mcrypt_generic_deinit($_cipher);
+        $pad = 8 - (strlen(self::$msg) % 8);
+        self::$msg .= str_repeat(chr($pad), $pad);
+
+        $result = openssl_encrypt(
+            self::$msg, 'aes-256-cbc', self::$hexKey, OPENSSL_RAW_DATA, self::$iv
+        );
         self::$sign = strtoupper(substr(bin2hex($result), 0, 32));
+        unset($result);
     }
 
     /**
@@ -253,8 +255,7 @@ final class pay24
     private static function getHexKey()
     {
         $hKey = "";
-        for ($i = 0; $i < strlen(self::$key); $i = $i + 2)
-        {
+        for ($i = 0; $i < strlen(self::$key); $i = $i + 2) {
             $hKey .= hex2bin(self::$key[$i] . self::$key[$i + 1]);
         }
         self::$hexKey = $hKey;
@@ -267,17 +268,16 @@ final class pay24
      * @return void
      * @static
      */
-    private static function get_message()
-    {
-        switch (self::$requestType)
-        {
-            case 'payRequest':
-                self::$data = sha1(self::$mid . self::$amount . self::$cac . self::$MsTxnId . self::$firstName . self::$familyName . self::$timeStamp, true);
-                break;
-            case 'payNote':
-                self::$data = sha1(self::$mid . self::$amount . self::$cac . self::$PspTxnId . self::$MsTxnId . self::$timeStamp . self::$Result, true);
-                break;
-        }
-    }
+     private function get_message()
+     {
+         switch (self::$requestType) {
+             case 'payRequest':
+                 self::$msg = sha1(self::$mid . self::$amount . self::$cac . self::$MsTxnId . self::$firstName . self::$familyName . self::$timeStamp, true);
+                 break;
+             case 'payNote':
+                 self::$msg = sha1(self::$mid . self::$amount . self::$cac . self::$PspTxnId . self::$MsTxnId . self::$timeStamp . self::$Result, true);
+                 break;
+         }
+     }
 
 }
